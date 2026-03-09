@@ -186,6 +186,32 @@ export interface Page {
    * URL-friendly identifier, e.g. "about-us"
    */
   slug: string;
+  seo?: {
+    /**
+     * Optimal: 50–60 karakter
+     */
+    metaTitle?: string | null;
+    /**
+     * Optimal: 150–160 karakter
+     */
+    metaDescription?: string | null;
+    /**
+     * Gambar untuk social media preview (1200x630px)
+     */
+    metaImage?: (number | null) | Media;
+    /**
+     * Pisahkan dengan koma, e.g. "keyword1, keyword2"
+     */
+    keywords?: string | null;
+    /**
+     * Centang untuk menyembunyikan halaman dari search engine
+     */
+    noIndex?: boolean | null;
+    /**
+     * Opsional, isi jika halaman ini duplikat dari URL lain
+     */
+    canonicalUrl?: string | null;
+  };
   layout?:
     | (
         | {
@@ -710,6 +736,16 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaImage?: T;
+        keywords?: T;
+        noIndex?: T;
+        canonicalUrl?: T;
+      };
   layout?:
     | T
     | {
@@ -1084,6 +1120,28 @@ export interface SiteSetting {
   siteDescription?: string | null;
   logo?: (number | null) | Media;
   contactEmail?: string | null;
+  /**
+   * Fallback SEO jika halaman tidak mengisi SEO sendiri
+   */
+  defaultSeo?: {
+    /**
+     * Biasanya nama site, e.g. "My Website"
+     */
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    /**
+     * Gambar default untuk social media preview (1200x630px)
+     */
+    metaImage?: (number | null) | Media;
+    /**
+     * e.g. "@mywebsite"
+     */
+    twitterHandle?: string | null;
+    /**
+     * e.g. "G-XXXXXXXXXX"
+     */
+    googleAnalyticsId?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1173,6 +1231,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   siteDescription?: T;
   logo?: T;
   contactEmail?: T;
+  defaultSeo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaImage?: T;
+        twitterHandle?: T;
+        googleAnalyticsId?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -12,7 +12,7 @@ import { ColumnsBlock } from '@/blocks/ColumnBlocks'
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
-    useAsTitle: 'title', // ← tampilkan title di admin panel
+    useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
   },
   fields: [
@@ -28,26 +28,89 @@ export const Pages: CollectionConfig = {
       unique: true,
       index: true,
       admin: {
-        position: 'sidebar', // ← tampil di sidebar admin
+        position: 'sidebar',
         description: 'URL-friendly identifier, e.g. "about-us"',
       },
       hooks: {
-        // ← auto-generate slug dari title
         beforeValidate: [
           ({ value, siblingData }) => {
             if (!value && siblingData?.title) {
               return siblingData.title
                 .toLowerCase()
                 .trim()
-                .replace(/[^\w\s-]/g, '') // hapus karakter spesial
-                .replace(/[\s_-]+/g, '-') // spasi jadi dash
-                .replace(/^-+|-+$/g, '') // hapus dash di awal/akhir
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_-]+/g, '-')
+                .replace(/^-+|-+$/g, '')
             }
             return value
           },
         ],
       },
     },
+
+    // ── SEO ─────────────────────────────────────────
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'metaTitle',
+          type: 'text',
+          label: 'Meta Title',
+          admin: {
+            description: 'Optimal: 50–60 karakter',
+          },
+        },
+        {
+          name: 'metaDescription',
+          type: 'textarea',
+          label: 'Meta Description',
+          admin: {
+            description: 'Optimal: 150–160 karakter',
+          },
+        },
+        {
+          name: 'metaImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'OG Image',
+          admin: {
+            description: 'Gambar untuk social media preview (1200x630px)',
+          },
+        },
+        {
+          name: 'keywords',
+          type: 'text',
+          label: 'Keywords',
+          admin: {
+            description: 'Pisahkan dengan koma, e.g. "keyword1, keyword2"',
+          },
+        },
+        {
+          name: 'noIndex',
+          type: 'checkbox',
+          label: 'No Index',
+          defaultValue: false,
+          admin: {
+            description: 'Centang untuk menyembunyikan halaman dari search engine',
+          },
+        },
+        {
+          name: 'canonicalUrl',
+          type: 'text',
+          label: 'Canonical URL',
+          admin: {
+            description: 'Opsional, isi jika halaman ini duplikat dari URL lain',
+          },
+        },
+      ],
+    },
+
+    // ── Layout Blocks ────────────────────────────────
     {
       name: 'layout',
       type: 'blocks',
