@@ -10,6 +10,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -34,5 +35,29 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    formBuilderPlugin({
+      fields: {
+        text: true,
+        textarea: true,
+        select: true,
+        email: true,
+        state: false,
+        country: false,
+        checkbox: true,
+        number: true,
+        message: true,
+        payment: false,
+      },
+      // Override collection forms jika perlu custom
+      formOverrides: {
+        slug: 'forms',
+        fields: ({ defaultFields }) => [...defaultFields],
+      },
+      // Override collection form-submissions jika perlu custom
+      formSubmissionOverrides: {
+        slug: 'form-submissions',
+      },
+    }),
+  ],
 })

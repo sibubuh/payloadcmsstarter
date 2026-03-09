@@ -1,3 +1,4 @@
+// src/blocks/ContentBlocks.ts
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { Block } from 'payload'
 
@@ -65,8 +66,6 @@ export const ImageBlock: Block = {
   ],
 }
 
-// blocks/VideoBlock.ts
-
 export const VideoBlock: Block = {
   slug: 'video',
   labels: { singular: 'Video', plural: 'Videos' },
@@ -82,7 +81,6 @@ export const VideoBlock: Block = {
         { label: 'Vimeo', value: 'vimeo' },
       ],
     },
-    // Self-hosted video
     {
       name: 'videoFile',
       type: 'upload',
@@ -91,7 +89,6 @@ export const VideoBlock: Block = {
         condition: (_, siblingData) => siblingData?.source === 'upload',
       },
     },
-    // Embed URL (YouTube / Vimeo)
     {
       name: 'embedUrl',
       type: 'text',
@@ -128,6 +125,138 @@ export const VideoBlock: Block = {
         { label: '4:3 (Standard)', value: '4/3' },
         { label: '1:1 (Square)', value: '1/1' },
         { label: '9:16 (Vertical)', value: '9/16' },
+      ],
+    },
+  ],
+}
+
+// ← SliderBlock baru
+export const SliderBlock: Block = {
+  slug: 'slider',
+  labels: { singular: 'Image Slider', plural: 'Image Sliders' },
+  fields: [
+    {
+      name: 'slides',
+      type: 'array',
+      label: 'Slides',
+      minRows: 1,
+      required: true,
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'alt',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'caption',
+          type: 'text',
+        },
+        {
+          name: 'heading',
+          type: 'text',
+          admin: {
+            description: 'Optional overlay heading on slide',
+          },
+        },
+        {
+          name: 'subheading',
+          type: 'text',
+          admin: {
+            description: 'Optional overlay subheading on slide',
+          },
+        },
+        {
+          name: 'link',
+          type: 'group',
+          fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              defaultValue: false,
+            },
+            {
+              name: 'url',
+              type: 'text',
+              admin: {
+                condition: (_, siblingData) => siblingData?.enabled,
+              },
+            },
+            {
+              name: 'label',
+              type: 'text',
+              admin: {
+                condition: (_, siblingData) => siblingData?.enabled,
+              },
+            },
+            {
+              name: 'newTab',
+              type: 'checkbox',
+              defaultValue: false,
+              admin: {
+                condition: (_, siblingData) => siblingData?.enabled,
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'autoplay',
+      type: 'checkbox',
+      label: 'Autoplay',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'autoplaySpeed',
+      type: 'number',
+      label: 'Autoplay Speed (ms)',
+      defaultValue: 4000,
+      admin: {
+        position: 'sidebar',
+        condition: (_, siblingData) => siblingData?.autoplay,
+        description: 'Duration per slide in milliseconds',
+      },
+    },
+    {
+      name: 'showDots',
+      type: 'checkbox',
+      label: 'Show Dots Navigation',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'showArrows',
+      type: 'checkbox',
+      label: 'Show Arrow Navigation',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'height',
+      type: 'select',
+      label: 'Slider Height',
+      defaultValue: 'medium',
+      admin: {
+        position: 'sidebar',
+      },
+      options: [
+        { label: 'Small (300px)', value: 'small' },
+        { label: 'Medium (500px)', value: 'medium' },
+        { label: 'Large (700px)', value: 'large' },
+        { label: 'Full Screen', value: 'screen' },
       ],
     },
   ],

@@ -1,6 +1,7 @@
 // blocks/ColumnsBlock.ts
 import { Block } from 'payload'
-import { HeroBlock, RichTextBlock, ImageBlock, VideoBlock } from './ContentBlocks'
+import { HeroBlock, RichTextBlock, ImageBlock, VideoBlock, SliderBlock } from './ContentBlocks'
+import { FormBlock } from './FormBlocks'
 
 export const ColumnsBlock: Block = {
   slug: 'columns',
@@ -15,7 +16,7 @@ export const ColumnsBlock: Block = {
         {
           name: 'content', // <-- nested blocks field
           type: 'blocks',
-          blocks: [HeroBlock, RichTextBlock, ImageBlock, VideoBlock],
+          blocks: [HeroBlock, RichTextBlock, ImageBlock, VideoBlock, FormBlock, SliderBlock],
         },
         {
           name: 'width',
