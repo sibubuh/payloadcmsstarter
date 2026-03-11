@@ -2,12 +2,14 @@ import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
+import { mcpPlugin } from '@payloadcms/plugin-mcp'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
+import { Jobs } from './collections/Jobs'
 import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
@@ -23,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages],
+  collections: [Users, Media, Pages, Jobs],
   globals: [Header, SiteSettings, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -58,6 +60,13 @@ export default buildConfig({
       // Override collection form-submissions jika perlu custom
       formSubmissionOverrides: {
         slug: 'form-submissions',
+      },
+    }),
+    mcpPlugin({
+      collections: {
+        jobs: { enabled: true },
+        users: { enabled: true },
+        forms: { enabled: true },
       },
     }),
   ],
