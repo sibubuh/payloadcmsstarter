@@ -353,6 +353,9 @@ export interface Page {
                         | {
                             form: number | Form;
                             enableIntro?: boolean | null;
+                            /**
+                             * Konten intro yang ditampilkan di atas form
+                             */
                             introContent?: {
                               root: {
                                 type: string;

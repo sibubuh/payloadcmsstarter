@@ -1,5 +1,6 @@
 // src/blocks/FormBlocks.ts
 import { Block } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const FormBlock: Block = {
   slug: 'formBlock',
@@ -11,7 +12,7 @@ export const FormBlock: Block = {
     {
       name: 'form',
       type: 'relationship',
-      relationTo: 'forms' as 'forms', // akan valid setelah generate:types
+      relationTo: 'forms' as 'forms',
       required: true,
     },
     {
@@ -23,8 +24,10 @@ export const FormBlock: Block = {
     {
       name: 'introContent',
       type: 'richText',
+      editor: lexicalEditor({}), // ← tambahkan editor lexical eksplisit
       admin: {
         condition: (_, siblingData) => siblingData?.enableIntro,
+        description: 'Konten intro yang ditampilkan di atas form',
       },
     },
   ],

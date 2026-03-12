@@ -41,7 +41,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body>
         <Header headerData={headerData} siteSettings={siteSettings} />
-        <main>{children}</main>
+        <main className="pt-20">{children}</main>
       </body>
     </html>
   )
