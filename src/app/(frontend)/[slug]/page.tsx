@@ -4,6 +4,7 @@ import config from '@/payload.config'
 import { notFound } from 'next/navigation'
 import { FormBlockRenderer } from '@/components/blocks/FormBlock'
 import { RichTextRenderer } from '@/components/RichTextRenderer'
+import { TabBlockComponent } from '@/components/blocks/TabBlock'
 import type { Metadata } from 'next'
 
 export async function generateMetadata({
@@ -100,7 +101,17 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
           </div>
         </section>
       )
-
+    case 'tabs': {
+      const tabEl = (
+        <TabBlockComponent tabs={block.tabs} style={block.style} alignment={block.alignment} />
+      )
+      if (isNested) return tabEl
+      return (
+        <section className="py-12 px-6">
+          <div className="max-w-6xl mx-auto">{tabEl}</div>
+        </section>
+      )
+    }
     case 'image': {
       const imageUrl = typeof block.image === 'object' ? block.image?.url : block.image
       const sizeClasses: Record<string, string> = {

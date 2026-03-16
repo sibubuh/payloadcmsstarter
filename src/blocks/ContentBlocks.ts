@@ -27,21 +27,9 @@ export const ImageBlock: Block = {
   slug: 'image',
   labels: { singular: 'Image', plural: 'Images' },
   fields: [
-    {
-      name: 'image',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-    },
-    {
-      name: 'caption',
-      type: 'text',
-    },
-    {
-      name: 'alt',
-      type: 'text',
-      required: true,
-    },
+    { name: 'image', type: 'upload', relationTo: 'media', required: true },
+    { name: 'caption', type: 'text' },
+    { name: 'alt', type: 'text', required: true },
     {
       name: 'size',
       type: 'select',
@@ -85,37 +73,20 @@ export const VideoBlock: Block = {
       name: 'videoFile',
       type: 'upload',
       relationTo: 'media',
-      admin: {
-        condition: (_, siblingData) => siblingData?.source === 'upload',
-      },
+      admin: { condition: (_, s) => s?.source === 'upload' },
     },
     {
       name: 'embedUrl',
       type: 'text',
       admin: {
-        condition: (_, siblingData) => ['youtube', 'vimeo'].includes(siblingData?.source),
-        description: 'Paste the full video URL (e.g. https://youtube.com/watch?v=...)',
+        condition: (_, s) => ['youtube', 'vimeo'].includes(s?.source),
+        description: 'Paste the full video URL',
       },
     },
-    {
-      name: 'caption',
-      type: 'text',
-    },
-    {
-      name: 'autoplay',
-      type: 'checkbox',
-      defaultValue: false,
-    },
-    {
-      name: 'loop',
-      type: 'checkbox',
-      defaultValue: false,
-    },
-    {
-      name: 'muted',
-      type: 'checkbox',
-      defaultValue: true,
-    },
+    { name: 'caption', type: 'text' },
+    { name: 'autoplay', type: 'checkbox', defaultValue: false },
+    { name: 'loop', type: 'checkbox', defaultValue: false },
+    { name: 'muted', type: 'checkbox', defaultValue: true },
     {
       name: 'aspectRatio',
       type: 'select',
@@ -130,7 +101,6 @@ export const VideoBlock: Block = {
   ],
 }
 
-// ← SliderBlock baru
 export const SliderBlock: Block = {
   slug: 'slider',
   labels: { singular: 'Image Slider', plural: 'Image Sliders' },
@@ -142,65 +112,23 @@ export const SliderBlock: Block = {
       minRows: 1,
       required: true,
       fields: [
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-        {
-          name: 'alt',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'caption',
-          type: 'text',
-        },
-        {
-          name: 'heading',
-          type: 'text',
-          admin: {
-            description: 'Optional overlay heading on slide',
-          },
-        },
-        {
-          name: 'subheading',
-          type: 'text',
-          admin: {
-            description: 'Optional overlay subheading on slide',
-          },
-        },
+        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'alt', type: 'text', required: true },
+        { name: 'caption', type: 'text' },
+        { name: 'heading', type: 'text' },
+        { name: 'subheading', type: 'text' },
         {
           name: 'link',
           type: 'group',
           fields: [
-            {
-              name: 'enabled',
-              type: 'checkbox',
-              defaultValue: false,
-            },
-            {
-              name: 'url',
-              type: 'text',
-              admin: {
-                condition: (_, siblingData) => siblingData?.enabled,
-              },
-            },
-            {
-              name: 'label',
-              type: 'text',
-              admin: {
-                condition: (_, siblingData) => siblingData?.enabled,
-              },
-            },
+            { name: 'enabled', type: 'checkbox', defaultValue: false },
+            { name: 'url', type: 'text', admin: { condition: (_, s) => s?.enabled } },
+            { name: 'label', type: 'text', admin: { condition: (_, s) => s?.enabled } },
             {
               name: 'newTab',
               type: 'checkbox',
               defaultValue: false,
-              admin: {
-                condition: (_, siblingData) => siblingData?.enabled,
-              },
+              admin: { condition: (_, s) => s?.enabled },
             },
           ],
         },
@@ -211,52 +139,102 @@ export const SliderBlock: Block = {
       type: 'checkbox',
       label: 'Autoplay',
       defaultValue: true,
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
     },
     {
       name: 'autoplaySpeed',
       type: 'number',
       label: 'Autoplay Speed (ms)',
       defaultValue: 4000,
-      admin: {
-        position: 'sidebar',
-        condition: (_, siblingData) => siblingData?.autoplay,
-        description: 'Duration per slide in milliseconds',
-      },
+      admin: { position: 'sidebar', condition: (_, s) => s?.autoplay },
     },
     {
       name: 'showDots',
       type: 'checkbox',
-      label: 'Show Dots Navigation',
+      label: 'Show Dots',
       defaultValue: true,
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
     },
     {
       name: 'showArrows',
       type: 'checkbox',
-      label: 'Show Arrow Navigation',
+      label: 'Show Arrows',
       defaultValue: true,
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
     },
     {
       name: 'height',
       type: 'select',
       label: 'Slider Height',
       defaultValue: 'medium',
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
       options: [
         { label: 'Small (300px)', value: 'small' },
         { label: 'Medium (500px)', value: 'medium' },
         { label: 'Large (700px)', value: 'large' },
         { label: 'Full Screen', value: 'screen' },
+      ],
+    },
+  ],
+}
+
+// ── TAB BLOCK ─────────────────────────────────────
+export const TabBlock: Block = {
+  slug: 'tabs',
+  labels: { singular: 'Tab Block', plural: 'Tab Blocks' },
+  fields: [
+    {
+      name: 'tabs',
+      type: 'array',
+      label: 'Tabs',
+      minRows: 1,
+      maxRows: 8,
+      required: true,
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          label: 'Tab Label',
+        },
+        {
+          name: 'icon',
+          type: 'text',
+          label: 'Icon (emoji atau teks)',
+          admin: {
+            description: 'Opsional, e.g. "🚀" atau "01"',
+          },
+        },
+        {
+          name: 'content',
+          type: 'blocks',
+          label: 'Tab Content',
+          blocks: [RichTextBlock, ImageBlock, VideoBlock, SliderBlock],
+        },
+      ],
+    },
+    {
+      name: 'style',
+      type: 'select',
+      label: 'Tab Style',
+      defaultValue: 'underline',
+      admin: { position: 'sidebar' },
+      options: [
+        { label: 'Underline', value: 'underline' },
+        { label: 'Pills', value: 'pills' },
+        { label: 'Boxed', value: 'boxed' },
+      ],
+    },
+    {
+      name: 'alignment',
+      type: 'select',
+      label: 'Tab Alignment',
+      defaultValue: 'left',
+      admin: { position: 'sidebar' },
+      options: [
+        { label: 'Left', value: 'left' },
+        { label: 'Center', value: 'center' },
+        { label: 'Right', value: 'right' },
       ],
     },
   ],

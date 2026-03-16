@@ -259,7 +259,7 @@ export interface Page {
             source: 'upload' | 'youtube' | 'vimeo';
             videoFile?: (number | null) | Media;
             /**
-             * Paste the full video URL (e.g. https://youtube.com/watch?v=...)
+             * Paste the full video URL
              */
             embedUrl?: string | null;
             caption?: string | null;
@@ -338,7 +338,7 @@ export interface Page {
                             source: 'upload' | 'youtube' | 'vimeo';
                             videoFile?: (number | null) | Media;
                             /**
-                             * Paste the full video URL (e.g. https://youtube.com/watch?v=...)
+                             * Paste the full video URL
                              */
                             embedUrl?: string | null;
                             caption?: string | null;
@@ -380,13 +380,7 @@ export interface Page {
                               image: number | Media;
                               alt: string;
                               caption?: string | null;
-                              /**
-                               * Optional overlay heading on slide
-                               */
                               heading?: string | null;
-                              /**
-                               * Optional overlay subheading on slide
-                               */
                               subheading?: string | null;
                               link?: {
                                 enabled?: boolean | null;
@@ -397,9 +391,6 @@ export interface Page {
                               id?: string | null;
                             }[];
                             autoplay?: boolean | null;
-                            /**
-                             * Duration per slide in milliseconds
-                             */
                             autoplaySpeed?: number | null;
                             showDots?: boolean | null;
                             showArrows?: boolean | null;
@@ -407,6 +398,95 @@ export interface Page {
                             id?: string | null;
                             blockName?: string | null;
                             blockType: 'slider';
+                          }
+                        | {
+                            tabs: {
+                              label: string;
+                              /**
+                               * Opsional, e.g. "🚀" atau "01"
+                               */
+                              icon?: string | null;
+                              content?:
+                                | (
+                                    | {
+                                        body?: {
+                                          root: {
+                                            type: string;
+                                            children: {
+                                              type: any;
+                                              version: number;
+                                              [k: string]: unknown;
+                                            }[];
+                                            direction: ('ltr' | 'rtl') | null;
+                                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                            indent: number;
+                                            version: number;
+                                          };
+                                          [k: string]: unknown;
+                                        } | null;
+                                        id?: string | null;
+                                        blockName?: string | null;
+                                        blockType: 'richText';
+                                      }
+                                    | {
+                                        image: number | Media;
+                                        caption?: string | null;
+                                        alt: string;
+                                        size?: ('small' | 'medium' | 'large' | 'full') | null;
+                                        alignment?: ('left' | 'center' | 'right') | null;
+                                        id?: string | null;
+                                        blockName?: string | null;
+                                        blockType: 'image';
+                                      }
+                                    | {
+                                        source: 'upload' | 'youtube' | 'vimeo';
+                                        videoFile?: (number | null) | Media;
+                                        /**
+                                         * Paste the full video URL
+                                         */
+                                        embedUrl?: string | null;
+                                        caption?: string | null;
+                                        autoplay?: boolean | null;
+                                        loop?: boolean | null;
+                                        muted?: boolean | null;
+                                        aspectRatio?: ('16/9' | '4/3' | '1/1' | '9/16') | null;
+                                        id?: string | null;
+                                        blockName?: string | null;
+                                        blockType: 'video';
+                                      }
+                                    | {
+                                        slides: {
+                                          image: number | Media;
+                                          alt: string;
+                                          caption?: string | null;
+                                          heading?: string | null;
+                                          subheading?: string | null;
+                                          link?: {
+                                            enabled?: boolean | null;
+                                            url?: string | null;
+                                            label?: string | null;
+                                            newTab?: boolean | null;
+                                          };
+                                          id?: string | null;
+                                        }[];
+                                        autoplay?: boolean | null;
+                                        autoplaySpeed?: number | null;
+                                        showDots?: boolean | null;
+                                        showArrows?: boolean | null;
+                                        height?: ('small' | 'medium' | 'large' | 'screen') | null;
+                                        id?: string | null;
+                                        blockName?: string | null;
+                                        blockType: 'slider';
+                                      }
+                                  )[]
+                                | null;
+                              id?: string | null;
+                            }[];
+                            style?: ('underline' | 'pills' | 'boxed') | null;
+                            alignment?: ('left' | 'center' | 'right') | null;
+                            id?: string | null;
+                            blockName?: string | null;
+                            blockType: 'tabs';
                           }
                       )[]
                     | null;
@@ -423,13 +503,7 @@ export interface Page {
               image: number | Media;
               alt: string;
               caption?: string | null;
-              /**
-               * Optional overlay heading on slide
-               */
               heading?: string | null;
-              /**
-               * Optional overlay subheading on slide
-               */
               subheading?: string | null;
               link?: {
                 enabled?: boolean | null;
@@ -440,9 +514,6 @@ export interface Page {
               id?: string | null;
             }[];
             autoplay?: boolean | null;
-            /**
-             * Duration per slide in milliseconds
-             */
             autoplaySpeed?: number | null;
             showDots?: boolean | null;
             showArrows?: boolean | null;
@@ -1090,6 +1161,86 @@ export interface PagesSelect<T extends boolean = true> {
                                 showDots?: T;
                                 showArrows?: T;
                                 height?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          tabs?:
+                            | T
+                            | {
+                                tabs?:
+                                  | T
+                                  | {
+                                      label?: T;
+                                      icon?: T;
+                                      content?:
+                                        | T
+                                        | {
+                                            richText?:
+                                              | T
+                                              | {
+                                                  body?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            image?:
+                                              | T
+                                              | {
+                                                  image?: T;
+                                                  caption?: T;
+                                                  alt?: T;
+                                                  size?: T;
+                                                  alignment?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            video?:
+                                              | T
+                                              | {
+                                                  source?: T;
+                                                  videoFile?: T;
+                                                  embedUrl?: T;
+                                                  caption?: T;
+                                                  autoplay?: T;
+                                                  loop?: T;
+                                                  muted?: T;
+                                                  aspectRatio?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                            slider?:
+                                              | T
+                                              | {
+                                                  slides?:
+                                                    | T
+                                                    | {
+                                                        image?: T;
+                                                        alt?: T;
+                                                        caption?: T;
+                                                        heading?: T;
+                                                        subheading?: T;
+                                                        link?:
+                                                          | T
+                                                          | {
+                                                              enabled?: T;
+                                                              url?: T;
+                                                              label?: T;
+                                                              newTab?: T;
+                                                            };
+                                                        id?: T;
+                                                      };
+                                                  autoplay?: T;
+                                                  autoplaySpeed?: T;
+                                                  showDots?: T;
+                                                  showArrows?: T;
+                                                  height?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
+                                          };
+                                      id?: T;
+                                    };
+                                style?: T;
+                                alignment?: T;
                                 id?: T;
                                 blockName?: T;
                               };
