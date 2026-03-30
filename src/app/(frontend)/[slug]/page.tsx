@@ -20,7 +20,7 @@ export async function generateMetadata({
     collection: 'pages',
     where: { slug: { equals: slug } },
     limit: 1,
-    select: { title: true, seo: true },
+    select: { title: true, seo: true, coverImage: true },
   })
 
   if (!result.docs.length) {
@@ -52,8 +52,19 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
 
   const page = result.docs[0]
 
+  const coverImageUrl = typeof page.coverImage === 'object' ? page.coverImage?.url : null
+
   return (
     <main>
+      {coverImageUrl && (
+        <div className="relative w-full" style={{ aspectRatio: '16/9', maxHeight: '60vh' }}>
+          <img
+            src={coverImageUrl}
+            alt={page.title || 'Cover'}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       {page.title && (
         <div className="py-12 px-6">
           <div className="max-w-6xl mx-auto">
@@ -70,25 +81,27 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
 
 function RenderBlock({ block, isNested = false }: { block: any; isNested?: boolean }) {
   switch (block.blockType) {
-    case 'hero':
+    case 'hero': {
+      const bgImage =
+        block.backgroundImageUrl ||
+        (typeof block.backgroundImage === 'object' ? block.backgroundImage?.url : null)
       return (
         <section
           className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
           style={{
-            backgroundImage: block.backgroundImage
-              ? `url(${typeof block.backgroundImage === 'object' ? block.backgroundImage.url : block.backgroundImage})`
-              : undefined,
+            backgroundImage: bgImage ? `url(${bgImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          {block.backgroundImage && <div className="absolute inset-0 bg-black/50" />}
+          {bgImage && <div className="absolute inset-0 bg-black/50" />}
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{block.heading}</h1>
             {block.subheading && <p className="text-xl text-white/90">{block.subheading}</p>}
           </div>
         </section>
       )
+    }
 
     case 'richText':
       if (isNested) {
@@ -113,7 +126,7 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
       )
     }
     case 'image': {
-      const imageUrl = typeof block.image === 'object' ? block.image?.url : block.image
+      const imageUrl = block.imageUrl || (typeof block.image === 'object' ? block.image?.url : null)
       const sizeClasses: Record<string, string> = {
         small: 'max-w-sm',
         medium: 'max-w-2xl',
@@ -187,7 +200,8 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
         <div className="relative overflow-hidden rounded-lg w-full">
           <div className="flex transition-transform duration-500 ease-in-out">
             {block.slides?.map((slide: any, slideIndex: number) => {
-              const slideImage = typeof slide.image === 'object' ? slide.image?.url : ''
+              const slideImage =
+                slide.imageUrl || (typeof slide.image === 'object' ? slide.image?.url : '')
               return (
                 <div
                   key={slideIndex}
@@ -233,19 +247,26 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
         full: 'w-full',
       }
       return (
-        <section className="py-12 px-6">
+        <section className="px-6">
           <div className="max-w-6xl mx-auto">
             <div className="flex flex-wrap gap-8">
-              {block.columns?.map((col: any, colIndex: number) => (
-                <div
-                  key={colIndex}
-                  className={`${widthClass[col.width] ?? 'w-full'} flex flex-col gap-6`}
-                >
-                  {col.content?.map((innerBlock: any, innerIndex: number) => (
-                    <RenderBlock key={innerIndex} block={innerBlock} isNested={true} />
-                  ))}
-                </div>
-              ))}
+              {block.columns?.map((col: any, colIndex: number) => {
+                const isHexColor = col.backgroundColor?.startsWith('#')
+                const bgStyle = isHexColor ? { backgroundColor: col.backgroundColor } : {}
+                const bgClass = !isHexColor && col.backgroundColor ? col.backgroundColor : ''
+
+                return (
+                  <div
+                    key={colIndex}
+                    className={`${widthClass[col.width] ?? 'w-full'} ${col.padding || 'py-12'} ${col.textColor || ''} ${bgClass} ${col.customClass || ''} flex flex-col gap-6`}
+                    style={bgStyle}
+                  >
+                    {col.content?.map((innerBlock: any, innerIndex: number) => (
+                      <RenderBlock key={innerIndex} block={innerBlock} isNested={true} />
+                    ))}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </section>

@@ -48,6 +48,16 @@ export const Pages: CollectionConfig = {
       },
     },
 
+    {
+      name: 'coverImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Cover Image',
+      admin: {
+        description: 'Featured image displayed at the top of the page',
+      },
+    },
+
     // ── SEO ─────────────────────────────────────────
     {
       name: 'seo',

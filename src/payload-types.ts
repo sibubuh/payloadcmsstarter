@@ -209,6 +209,10 @@ export interface Page {
    * URL-friendly identifier, e.g. "about-us"
    */
   slug: string;
+  /**
+   * Featured image displayed at the top of the page
+   */
+  coverImage?: (number | null) | Media;
   seo?: {
     /**
      * Optimal: 50–60 karakter
@@ -241,12 +245,20 @@ export interface Page {
             heading: string;
             subheading?: string | null;
             backgroundImage?: (number | null) | Media;
+            /**
+             * External image URL (e.g. https://images.unsplash.com/...)
+             */
+            backgroundImageUrl?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
           }
         | {
-            image: number | Media;
+            image?: (number | null) | Media;
+            /**
+             * External image URL (e.g. https://images.unsplash.com/...)
+             */
+            imageUrl?: string | null;
             caption?: string | null;
             alt: string;
             size?: ('small' | 'medium' | 'large' | 'full') | null;
@@ -300,6 +312,10 @@ export interface Page {
                             heading: string;
                             subheading?: string | null;
                             backgroundImage?: (number | null) | Media;
+                            /**
+                             * External image URL (e.g. https://images.unsplash.com/...)
+                             */
+                            backgroundImageUrl?: string | null;
                             id?: string | null;
                             blockName?: string | null;
                             blockType: 'hero';
@@ -325,7 +341,11 @@ export interface Page {
                             blockType: 'richText';
                           }
                         | {
-                            image: number | Media;
+                            image?: (number | null) | Media;
+                            /**
+                             * External image URL (e.g. https://images.unsplash.com/...)
+                             */
+                            imageUrl?: string | null;
                             caption?: string | null;
                             alt: string;
                             size?: ('small' | 'medium' | 'large' | 'full') | null;
@@ -377,7 +397,11 @@ export interface Page {
                           }
                         | {
                             slides: {
-                              image: number | Media;
+                              image?: (number | null) | Media;
+                              /**
+                               * External image URL (e.g. https://images.unsplash.com/...)
+                               */
+                              imageUrl?: string | null;
                               alt: string;
                               caption?: string | null;
                               heading?: string | null;
@@ -429,7 +453,11 @@ export interface Page {
                                         blockType: 'richText';
                                       }
                                     | {
-                                        image: number | Media;
+                                        image?: (number | null) | Media;
+                                        /**
+                                         * External image URL (e.g. https://images.unsplash.com/...)
+                                         */
+                                        imageUrl?: string | null;
                                         caption?: string | null;
                                         alt: string;
                                         size?: ('small' | 'medium' | 'large' | 'full') | null;
@@ -456,7 +484,11 @@ export interface Page {
                                       }
                                     | {
                                         slides: {
-                                          image: number | Media;
+                                          image?: (number | null) | Media;
+                                          /**
+                                           * External image URL (e.g. https://images.unsplash.com/...)
+                                           */
+                                          imageUrl?: string | null;
                                           alt: string;
                                           caption?: string | null;
                                           heading?: string | null;
@@ -491,6 +523,16 @@ export interface Page {
                       )[]
                     | null;
                   width?: ('1/4' | '1/3' | '1/2' | '2/3' | '3/4' | 'full') | null;
+                  /**
+                   * Hex color (e.g. #1f2937) or Tailwind class (e.g. bg-gray-900)
+                   */
+                  backgroundColor?: string | null;
+                  textColor?: ('' | 'text-white' | 'text-gray-500' | 'text-gray-900') | null;
+                  padding?: ('' | 'py-4' | 'py-8' | 'py-12') | null;
+                  /**
+                   * Additional Tailwind classes
+                   */
+                  customClass?: string | null;
                   id?: string | null;
                 }[]
               | null;
@@ -500,7 +542,11 @@ export interface Page {
           }
         | {
             slides: {
-              image: number | Media;
+              image?: (number | null) | Media;
+              /**
+               * External image URL (e.g. https://images.unsplash.com/...)
+               */
+              imageUrl?: string | null;
               alt: string;
               caption?: string | null;
               heading?: string | null;
@@ -1022,6 +1068,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  coverImage?: T;
   seo?:
     | T
     | {
@@ -1041,6 +1088,7 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               subheading?: T;
               backgroundImage?: T;
+              backgroundImageUrl?: T;
               id?: T;
               blockName?: T;
             };
@@ -1048,6 +1096,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               image?: T;
+              imageUrl?: T;
               caption?: T;
               alt?: T;
               size?: T;
@@ -1091,6 +1140,7 @@ export interface PagesSelect<T extends boolean = true> {
                                 heading?: T;
                                 subheading?: T;
                                 backgroundImage?: T;
+                                backgroundImageUrl?: T;
                                 id?: T;
                                 blockName?: T;
                               };
@@ -1105,6 +1155,7 @@ export interface PagesSelect<T extends boolean = true> {
                             | T
                             | {
                                 image?: T;
+                                imageUrl?: T;
                                 caption?: T;
                                 alt?: T;
                                 size?: T;
@@ -1142,6 +1193,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       image?: T;
+                                      imageUrl?: T;
                                       alt?: T;
                                       caption?: T;
                                       heading?: T;
@@ -1186,6 +1238,7 @@ export interface PagesSelect<T extends boolean = true> {
                                               | T
                                               | {
                                                   image?: T;
+                                                  imageUrl?: T;
                                                   caption?: T;
                                                   alt?: T;
                                                   size?: T;
@@ -1214,6 +1267,7 @@ export interface PagesSelect<T extends boolean = true> {
                                                     | T
                                                     | {
                                                         image?: T;
+                                                        imageUrl?: T;
                                                         alt?: T;
                                                         caption?: T;
                                                         heading?: T;
@@ -1246,6 +1300,10 @@ export interface PagesSelect<T extends boolean = true> {
                               };
                         };
                     width?: T;
+                    backgroundColor?: T;
+                    textColor?: T;
+                    padding?: T;
+                    customClass?: T;
                     id?: T;
                   };
               id?: T;
@@ -1258,6 +1316,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    imageUrl?: T;
                     alt?: T;
                     caption?: T;
                     heading?: T;

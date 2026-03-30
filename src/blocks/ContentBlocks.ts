@@ -20,6 +20,14 @@ export const HeroBlock: Block = {
     { name: 'heading', type: 'text', required: true },
     { name: 'subheading', type: 'text' },
     { name: 'backgroundImage', type: 'upload', relationTo: 'media' },
+    {
+      name: 'backgroundImageUrl',
+      type: 'text',
+      label: 'Background Image URL',
+      admin: {
+        description: 'External image URL (e.g. https://images.unsplash.com/...)',
+      },
+    },
   ],
 }
 
@@ -27,7 +35,15 @@ export const ImageBlock: Block = {
   slug: 'image',
   labels: { singular: 'Image', plural: 'Images' },
   fields: [
-    { name: 'image', type: 'upload', relationTo: 'media', required: true },
+    { name: 'image', type: 'upload', relationTo: 'media' },
+    {
+      name: 'imageUrl',
+      type: 'text',
+      label: 'Image URL',
+      admin: {
+        description: 'External image URL (e.g. https://images.unsplash.com/...)',
+      },
+    },
     { name: 'caption', type: 'text' },
     { name: 'alt', type: 'text', required: true },
     {
@@ -112,7 +128,15 @@ export const SliderBlock: Block = {
       minRows: 1,
       required: true,
       fields: [
-        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'image', type: 'upload', relationTo: 'media' },
+        {
+          name: 'imageUrl',
+          type: 'text',
+          label: 'Image URL',
+          admin: {
+            description: 'External image URL (e.g. https://images.unsplash.com/...)',
+          },
+        },
         { name: 'alt', type: 'text', required: true },
         { name: 'caption', type: 'text' },
         { name: 'heading', type: 'text' },
