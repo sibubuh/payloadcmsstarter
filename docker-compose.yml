@@ -23,7 +23,7 @@ services:
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d panji-raya']
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d payload-starter']
       interval: 30s
       timeout: 20s
       retries: 3
