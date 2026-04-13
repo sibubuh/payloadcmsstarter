@@ -51,14 +51,14 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-24 md:py-32">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#020617] py-24 md:py-32">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl animate-pulse" />
           <div
             className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"
             style={{ animationDelay: '1s' }}
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
@@ -108,8 +108,8 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div className="max-w-8xl mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Filter Projects</h2>
             <p className="text-gray-600">Browse projects by category</p>
@@ -125,13 +125,13 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
                   value={cat.value}
                   className={`relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 overflow-hidden ${
                     activeCategory === cat.value
-                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30 scale-105'
-                      : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-purple-300 hover:shadow-md'
+                      ? 'bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] text-white shadow-lg shadow-blue-900/30 scale-105'
+                      : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:border-blue-400 hover:shadow-md'
                   }`}
                 >
                   {cat.label}
                   {activeCategory === cat.value && (
-                    <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse opacity-50" />
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] animate-pulse opacity-40" />
                   )}
                 </button>
               ))}
@@ -169,7 +169,7 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
         {(otherProjects.length > 0 || params.category) && (
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
+              <div className="w-12 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" />
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 {params.category
                   ? CATEGORIES.find((c) => c.value === params.category)?.label || 'Projects'
@@ -226,7 +226,7 @@ export default async function PortfolioPage({ searchParams }: PortfolioPageProps
         )}
       </div>
 
-      <section className="bg-gradient-to-br from-purple-900 via-pink-900 to-slate-900 py-20 mt-12">
+      <section className="bg-gradient-to-br from-purple-900 via-blue-900 to-slate-900 py-20 mt-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Have a project in mind?

@@ -8,6 +8,8 @@ import config from '@/payload.config'
 import './styles.css'
 import Hero from '@/components/Hero'
 import { PortfolioSlider } from '@/components/PortfolioSlider'
+import StatsCounter from '@/components/Home/StatCounter'
+import BelowHero from '@/components/Home/BelowHero'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -20,6 +22,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero siteSettings={siteSettings} />
+      <BelowHero />
+      <StatsCounter />
       <PortfolioSlider />
     </>
   )

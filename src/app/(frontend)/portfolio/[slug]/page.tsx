@@ -120,7 +120,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         />
 
         <div className="absolute inset-0 z-20 flex items-end">
-          <div className="max-w-7xl mx-auto px-6 pb-12 md:pb-20 w-full">
+          <div className="max-w-8xl mx-auto px-6 pb-12 md:pb-20 w-full">
             <div className="flex flex-wrap items-center gap-3 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <Link
                 href="/portfolio"
@@ -161,7 +161,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent z-20" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-8xl mx-auto px-6 py-16 md:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 -mt-8 relative z-30">
           <aside className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-24">

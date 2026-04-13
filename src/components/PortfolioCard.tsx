@@ -34,7 +34,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'web-design': 'bg-purple-500',
   'web-development': 'bg-blue-500',
   'mobile-app': 'bg-green-500',
-  branding: 'bg-pink-500',
+  branding: 'bg-blue-500',
   'ui-ux': 'bg-orange-500',
   ecommerce: 'bg-cyan-500',
   motion: 'bg-red-500',
