@@ -202,6 +202,54 @@ export const SliderBlock: Block = {
   ],
 }
 
+// ── ACCORDION BLOCK ────────────────────────────────
+export const AccordionBlock: Block = {
+  slug: 'accordion',
+  labels: { singular: 'Accordion', plural: 'Accordions' },
+  fields: [
+    { name: 'heading', type: 'text', label: 'Section Heading' },
+    { name: 'subheading', type: 'text', label: 'Subheading' },
+    {
+      name: 'items',
+      type: 'array',
+      label: 'Accordion Items',
+      minRows: 1,
+      required: true,
+      labels: { singular: 'Item', plural: 'Items' },
+      fields: [
+        { name: 'title', type: 'text', label: 'Question / Title', required: true },
+        {
+          name: 'content',
+          type: 'richText',
+          label: 'Answer / Content',
+          editor: lexicalEditor({}),
+          required: true,
+        },
+        { name: 'defaultOpen', type: 'checkbox', label: 'Open by default', defaultValue: false },
+      ],
+    },
+    {
+      name: 'style',
+      type: 'select',
+      label: 'Visual Style',
+      defaultValue: 'bordered',
+      admin: { position: 'sidebar' },
+      options: [
+        { label: 'Bordered', value: 'bordered' },
+        { label: 'Flush (no borders)', value: 'flush' },
+        { label: 'Card (boxed)', value: 'card' },
+      ],
+    },
+    {
+      name: 'allowMultiple',
+      type: 'checkbox',
+      label: 'Allow multiple items open at once',
+      defaultValue: false,
+      admin: { position: 'sidebar' },
+    },
+  ],
+}
+
 // ── TAB BLOCK ─────────────────────────────────────
 export const TabBlock: Block = {
   slug: 'tabs',
@@ -233,7 +281,7 @@ export const TabBlock: Block = {
           name: 'content',
           type: 'blocks',
           label: 'Tab Content',
-          blocks: [RichTextBlock, ImageBlock, VideoBlock, SliderBlock],
+          blocks: [RichTextBlock, ImageBlock, VideoBlock, SliderBlock, AccordionBlock],
         },
       ],
     },

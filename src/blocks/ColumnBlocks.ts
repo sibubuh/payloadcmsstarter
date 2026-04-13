@@ -7,6 +7,7 @@ import {
   VideoBlock,
   SliderBlock,
   TabBlock,
+  AccordionBlock,
 } from './ContentBlocks' // ← tambah TabBlock
 import { FormBlock } from './FormBlocks'
 
@@ -31,6 +32,7 @@ export const ColumnsBlock: Block = {
             FormBlock,
             SliderBlock,
             TabBlock,
+            AccordionBlock,
           ],
         },
         {

@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     pages: Page;
     jobs: Job;
+    portfolio: Portfolio;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-mcp-api-keys': PayloadMcpApiKey;
@@ -86,6 +87,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     jobs: JobsSelect<false> | JobsSelect<true>;
+    portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
@@ -510,6 +512,35 @@ export interface Page {
                                         blockName?: string | null;
                                         blockType: 'slider';
                                       }
+                                    | {
+                                        heading?: string | null;
+                                        subheading?: string | null;
+                                        items: {
+                                          title: string;
+                                          content: {
+                                            root: {
+                                              type: string;
+                                              children: {
+                                                type: any;
+                                                version: number;
+                                                [k: string]: unknown;
+                                              }[];
+                                              direction: ('ltr' | 'rtl') | null;
+                                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                              indent: number;
+                                              version: number;
+                                            };
+                                            [k: string]: unknown;
+                                          };
+                                          defaultOpen?: boolean | null;
+                                          id?: string | null;
+                                        }[];
+                                        style?: ('bordered' | 'flush' | 'card') | null;
+                                        allowMultiple?: boolean | null;
+                                        id?: string | null;
+                                        blockName?: string | null;
+                                        blockType: 'accordion';
+                                      }
                                   )[]
                                 | null;
                               id?: string | null;
@@ -519,6 +550,35 @@ export interface Page {
                             id?: string | null;
                             blockName?: string | null;
                             blockType: 'tabs';
+                          }
+                        | {
+                            heading?: string | null;
+                            subheading?: string | null;
+                            items: {
+                              title: string;
+                              content: {
+                                root: {
+                                  type: string;
+                                  children: {
+                                    type: any;
+                                    version: number;
+                                    [k: string]: unknown;
+                                  }[];
+                                  direction: ('ltr' | 'rtl') | null;
+                                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                                  indent: number;
+                                  version: number;
+                                };
+                                [k: string]: unknown;
+                              };
+                              defaultOpen?: boolean | null;
+                              id?: string | null;
+                            }[];
+                            style?: ('bordered' | 'flush' | 'card') | null;
+                            allowMultiple?: boolean | null;
+                            id?: string | null;
+                            blockName?: string | null;
+                            blockType: 'accordion';
                           }
                       )[]
                     | null;
@@ -567,6 +627,35 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'slider';
+          }
+        | {
+            heading?: string | null;
+            subheading?: string | null;
+            items: {
+              title: string;
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              defaultOpen?: boolean | null;
+              id?: string | null;
+            }[];
+            style?: ('bordered' | 'flush' | 'card') | null;
+            allowMultiple?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordion';
           }
       )[]
     | null;
@@ -820,6 +909,98 @@ export interface Job {
   createdAt: string;
 }
 /**
+ * Manage your portfolio projects and case studies.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio".
+ */
+export interface Portfolio {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly identifier (auto-generated or custom).
+   */
+  slug: string;
+  status: 'draft' | 'published' | 'archived';
+  publishedAt?: string | null;
+  category: 'web-design' | 'web-development' | 'mobile-app' | 'branding' | 'ui-ux' | 'ecommerce' | 'motion' | 'other';
+  /**
+   * Add relevant tags for filtering and search.
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  client?: string | null;
+  projectUrl?: string | null;
+  repositoryUrl?: string | null;
+  year?: number | null;
+  /**
+   * Show this project in featured sections.
+   */
+  featured?: boolean | null;
+  /**
+   * Primary image shown in listing views (recommended: 1200×800px).
+   */
+  coverImage: number | Media;
+  /**
+   * Additional screenshots or images for the project.
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        alt: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Short description shown in card/listing views (max 300 chars).
+   */
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Technologies, frameworks, or tools used in this project.
+   */
+  techStack?:
+    | {
+        name: string;
+        role?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  testimonial?: {
+    quote?: string | null;
+    author?: string | null;
+    authorTitle?: string | null;
+    avatar?: (number | null) | Media;
+  };
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -956,6 +1137,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'jobs';
         value: number | Job;
+      } | null)
+    | ({
+        relationTo: 'portfolio';
+        value: number | Portfolio;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1290,11 +1475,47 @@ export interface PagesSelect<T extends boolean = true> {
                                                   id?: T;
                                                   blockName?: T;
                                                 };
+                                            accordion?:
+                                              | T
+                                              | {
+                                                  heading?: T;
+                                                  subheading?: T;
+                                                  items?:
+                                                    | T
+                                                    | {
+                                                        title?: T;
+                                                        content?: T;
+                                                        defaultOpen?: T;
+                                                        id?: T;
+                                                      };
+                                                  style?: T;
+                                                  allowMultiple?: T;
+                                                  id?: T;
+                                                  blockName?: T;
+                                                };
                                           };
                                       id?: T;
                                     };
                                 style?: T;
                                 alignment?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          accordion?:
+                            | T
+                            | {
+                                heading?: T;
+                                subheading?: T;
+                                items?:
+                                  | T
+                                  | {
+                                      title?: T;
+                                      content?: T;
+                                      defaultOpen?: T;
+                                      id?: T;
+                                    };
+                                style?: T;
+                                allowMultiple?: T;
                                 id?: T;
                                 blockName?: T;
                               };
@@ -1339,6 +1560,24 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        accordion?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    defaultOpen?: T;
+                    id?: T;
+                  };
+              style?: T;
+              allowMultiple?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1369,6 +1608,64 @@ export interface JobsSelect<T extends boolean = true> {
   applyForm?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "portfolio_select".
+ */
+export interface PortfolioSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  category?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  client?: T;
+  projectUrl?: T;
+  repositoryUrl?: T;
+  year?: T;
+  featured?: T;
+  coverImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        alt?: T;
+        id?: T;
+      };
+  excerpt?: T;
+  content?: T;
+  techStack?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        id?: T;
+      };
+  testimonial?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        authorTitle?: T;
+        avatar?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

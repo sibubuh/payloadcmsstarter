@@ -1,4 +1,3 @@
-// src/components/blocks/TabBlock/index.tsx
 'use client'
 
 import React, { useState } from 'react'
@@ -18,11 +17,10 @@ type Tab = {
 
 type TabBlockProps = {
   tabs: Tab[]
-  style?: 'underline' | 'pills' | 'boxed'
   alignment?: 'left' | 'center' | 'right'
 }
 
-// ── Render inner block di dalam tab ──────────────
+// ── Inner Block Renderer ───────────────────────
 function TabInnerBlock({ block }: { block: any }) {
   switch (block.blockType) {
     case 'richText':
@@ -33,7 +31,7 @@ function TabInnerBlock({ block }: { block: any }) {
       return (
         <figure>
           {imageUrl && (
-            <img src={imageUrl} alt={block.alt || ''} className="w-full h-auto rounded-lg" />
+            <img src={imageUrl} alt={block.alt || ''} className="w-full h-auto rounded-xl" />
           )}
           {block.caption && (
             <figcaption className="mt-2 text-sm text-gray-500 text-center">
@@ -55,10 +53,12 @@ function TabInnerBlock({ block }: { block: any }) {
       } else if (block.source === 'upload' && block.videoFile) {
         videoSrc = typeof block.videoFile === 'object' ? block.videoFile?.url || '' : ''
       }
+
       if (!videoSrc) return null
+
       return (
         <div
-          className="relative rounded-lg overflow-hidden w-full"
+          className="relative rounded-xl overflow-hidden w-full shadow-sm"
           style={{ aspectRatio: block.aspectRatio || '16/9' }}
         >
           <iframe
@@ -71,35 +71,12 @@ function TabInnerBlock({ block }: { block: any }) {
       )
     }
 
-    case 'slider': {
-      return (
-        <div className="relative overflow-hidden rounded-lg">
-          <div className="flex">
-            {block.slides?.map((slide: any, i: number) => {
-              const url = typeof slide.image === 'object' ? slide.image?.url : ''
-              return (
-                <div key={i} className="w-full flex-shrink-0" style={{ aspectRatio: '16/9' }}>
-                  {url && (
-                    <img src={url} alt={slide.alt || ''} className="w-full h-full object-cover" />
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )
-    }
-
     default:
       return null
   }
 }
 
-export function TabBlockComponent({
-  tabs,
-  style = 'underline',
-  alignment = 'left',
-}: TabBlockProps) {
+export function TabBlockComponent({ tabs, alignment = 'center' }: TabBlockProps) {
   const [activeTab, setActiveTab] = useState(0)
 
   const alignClass = {
@@ -108,64 +85,65 @@ export function TabBlockComponent({
     right: 'justify-end',
   }[alignment]
 
-  // ── Tab button styles ─────────────────────────
-  const getTabClass = (isActive: boolean) => {
-    if (style === 'pills') {
-      return isActive
-        ? 'px-5 py-2 rounded-full bg-black text-white text-sm font-semibold transition-all'
-        : 'px-5 py-2 rounded-full text-gray-600 hover:bg-gray-100 text-sm font-semibold transition-all'
-    }
-    if (style === 'boxed') {
-      return isActive
-        ? 'px-5 py-3 border-t border-l border-r border-gray-200 bg-white text-black text-sm font-semibold -mb-px rounded-t-lg transition-all'
-        : 'px-5 py-3 text-gray-500 hover:text-black text-sm font-semibold transition-all'
-    }
-    // underline (default)
-    return isActive
-      ? 'px-5 py-3 text-black text-sm font-semibold border-b-2 border-black transition-all'
-      : 'px-5 py-3 text-gray-500 hover:text-black text-sm font-semibold border-b-2 border-transparent hover:border-gray-300 transition-all'
-  }
-
-  const containerClass = {
-    underline: 'border-b border-gray-200',
-    pills: 'bg-gray-50 p-1 rounded-full w-fit',
-    boxed: 'border-b border-gray-200',
-  }[style]
-
   return (
     <div className="w-full">
-      {/* ── Tab Headers ────────────────────────── */}
-      <div className={`flex ${alignClass} ${containerClass} mb-6 overflow-x-auto`}>
-        {tabs?.map((tab, index) => (
-          <button
-            key={tab.id || index}
-            onClick={() => setActiveTab(index)}
-            className={getTabClass(activeTab === index)}
-          >
-            {tab.icon && <span className="mr-2">{tab.icon}</span>}
-            {tab.label}
-          </button>
-        ))}
+      {/* ── Modern Tabs Header ───────────────── */}
+      <div className={`flex ${alignClass}`}>
+        <div className="relative flex gap-1 p-1 bg-gray-100/70 backdrop-blur rounded-2xl shadow-inner">
+          {/* Sliding Background */}
+          <div
+            className="absolute top-1 bottom-1 bg-white rounded-xl shadow-sm transition-all duration-300"
+            style={{
+              width: `calc(100% / ${tabs.length})`,
+              transform: `translateX(${activeTab * 100}%)`,
+            }}
+          />
+
+          {tabs?.map((tab, index) => {
+            const isActive = activeTab === index
+
+            return (
+              <button
+                key={tab.id || index}
+                onClick={() => setActiveTab(index)}
+                className={`relative z-10 px-5 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${
+                  isActive ? 'text-black' : 'text-gray-500 hover:text-black'
+                }`}
+              >
+                {tab.icon && <span className="mr-2">{tab.icon}</span>}
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {/* ── Tab Content ────────────────────────── */}
-      <div>
-        {tabs?.map((tab, index) => (
-          <div
-            key={tab.id || index}
-            className={`transition-all duration-200 ${activeTab === index ? 'block' : 'hidden'}`}
-          >
-            {tab.content?.length > 0 ? (
-              <div className="flex flex-col gap-6">
-                {tab.content.map((block, blockIndex) => (
-                  <TabInnerBlock key={blockIndex} block={block} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400 italic text-sm">No content in this tab.</p>
-            )}
-          </div>
-        ))}
+      {/* ── Content ─────────────────────────── */}
+      <div className="relative mt-8">
+        {tabs?.map((tab, index) => {
+          const isActive = activeTab === index
+
+          return (
+            <div
+              key={tab.id || index}
+              className={`transition-all duration-300 ease-out ${
+                isActive
+                  ? 'opacity-100 translate-y-0 scale-100'
+                  : 'opacity-0 translate-y-3 scale-[0.98] absolute inset-0 pointer-events-none'
+              }`}
+            >
+              {tab.content?.length > 0 ? (
+                <div className="flex flex-col gap-6">
+                  {tab.content.map((block, blockIndex) => (
+                    <TabInnerBlock key={blockIndex} block={block} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-400 italic text-sm">No content in this tab.</p>
+              )}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

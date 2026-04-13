@@ -6,6 +6,7 @@ import {
   VideoBlock,
   RichTextBlock,
   SliderBlock,
+  AccordionBlock,
 } from '../blocks/ContentBlocks'
 import { ColumnsBlock } from '@/blocks/ColumnBlocks'
 
@@ -124,7 +125,15 @@ export const Pages: CollectionConfig = {
     {
       name: 'layout',
       type: 'blocks',
-      blocks: [HeroBlock, ImageBlock, VideoBlock, RichTextBlock, ColumnsBlock, SliderBlock],
+      blocks: [
+        HeroBlock,
+        ImageBlock,
+        VideoBlock,
+        RichTextBlock,
+        ColumnsBlock,
+        SliderBlock,
+        AccordionBlock,
+      ],
     },
   ],
 }

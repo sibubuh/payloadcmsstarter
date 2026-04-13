@@ -5,7 +5,11 @@ import { notFound } from 'next/navigation'
 import { FormBlockRenderer } from '@/components/blocks/FormBlock'
 import { RichTextRenderer } from '@/components/RichTextRenderer'
 import { TabBlockComponent } from '@/components/blocks/TabBlock'
+import { AccordionBlockComponent } from '@/components/blocks/AccordionBlock'
 import type { Metadata } from 'next'
+
+//import '../global.css'
+import { HeroScrollButton } from '@/components/HeroScrollButton'
 
 export async function generateMetadata({
   params,
@@ -53,51 +57,70 @@ export default async function DynamicPage({ params }: { params: Promise<{ slug: 
   const page = result.docs[0]
 
   const coverImageUrl = typeof page.coverImage === 'object' ? page.coverImage?.url : null
+  const firstBlockIsHero = page.layout?.[0]?.blockType === 'hero'
 
   return (
-    <main>
-      {coverImageUrl && (
-        <div className="relative w-full" style={{ aspectRatio: '16/9', maxHeight: '60vh' }}>
-          <img
-            src={coverImageUrl}
-            alt={page.title || 'Cover'}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-      {page.title && (
-        <div className="py-12 px-6">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">{page.title}</h1>
-          </div>
-        </div>
-      )}
+    <main className="overflow-x-hidden">
       {page.layout?.map((block: any, index: number) => (
-        <RenderBlock key={index} block={block} isNested={false} />
+        <RenderBlock key={index} block={block} isNested={false} isFirst={index === 0} />
       ))}
     </main>
   )
 }
 
-function RenderBlock({ block, isNested = false }: { block: any; isNested?: boolean }) {
+function RenderBlock({
+  block,
+  isNested = false,
+  isFirst = false,
+}: {
+  block: any
+  isNested?: boolean
+  isFirst?: boolean
+}) {
   switch (block.blockType) {
     case 'hero': {
       const bgImage =
         block.backgroundImageUrl ||
         (typeof block.backgroundImage === 'object' ? block.backgroundImage?.url : null)
+
+      const scrollToNext = () => {
+        const nextSection = document.querySelector('main > *:nth-child(2)')
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+
       return (
         <section
-          className="relative min-h-[60vh] flex items-center justify-center overflow-hidden"
+          className="relative w-screen min-h-screen flex items-center justify-center overflow-hidden py-0"
           style={{
+            marginLeft: 'calc(-50vw + 50%)',
+            marginRight: 'calc(-50vw + 50%)',
             backgroundImage: bgImage ? `url(${bgImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundColor: bgImage ? undefined : '#111',
           }}
         >
-          {bgImage && <div className="absolute inset-0 bg-black/50" />}
-          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{block.heading}</h1>
-            {block.subheading && <p className="text-xl text-white/90">{block.subheading}</p>}
+          {bgImage && (
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/65" />
+          )}
+
+          {/* Content */}
+          <div className="relative z-10 max-w-4xl mx-auto text-center animate-hero-in">
+            {block.tagline && (
+              <p className="text-xs tracking-widest uppercase text-white/60 mb-4">
+                {block.tagline}
+              </p>
+            )}
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+              {block.heading}
+            </h1>
+            {block.subheading && (
+              <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto">
+                {block.subheading}
+              </p>
+            )}
           </div>
         </section>
       )
@@ -108,16 +131,15 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
         return <RichTextRenderer content={block.body} />
       }
       return (
-        <section className="py-12 px-6">
+        <section className="py-12 px-12">
           <div className="max-w-4xl mx-auto">
             <RichTextRenderer content={block.body} />
           </div>
         </section>
       )
+
     case 'tabs': {
-      const tabEl = (
-        <TabBlockComponent tabs={block.tabs} style={block.style} alignment={block.alignment} />
-      )
+      const tabEl = <TabBlockComponent tabs={block.tabs} alignment={block.alignment} />
       if (isNested) return tabEl
       return (
         <section className="py-12 px-6">
@@ -125,6 +147,24 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
         </section>
       )
     }
+
+    case 'accordion': {
+      const accordionEl = (
+        <AccordionBlockComponent
+          heading={block.heading}
+          subheading={block.subheading}
+          items={block.items}
+          allowMultiple={block.allowMultiple}
+        />
+      )
+      if (isNested) return accordionEl
+      return (
+        <section className="py-12 px-6">
+          <div className="max-w-4xl mx-auto">{accordionEl}</div>
+        </section>
+      )
+    }
+
     case 'image': {
       const imageUrl = block.imageUrl || (typeof block.image === 'object' ? block.image?.url : null)
       const sizeClasses: Record<string, string> = {
@@ -248,7 +288,7 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
       }
       return (
         <section className="px-6">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-full mx-auto">
             <div className="flex flex-wrap gap-8">
               {block.columns?.map((col: any, colIndex: number) => {
                 const isHexColor = col.backgroundColor?.startsWith('#')
@@ -258,7 +298,7 @@ function RenderBlock({ block, isNested = false }: { block: any; isNested?: boole
                 return (
                   <div
                     key={colIndex}
-                    className={`${widthClass[col.width] ?? 'w-full'} ${col.padding || 'py-12'} ${col.textColor || ''} ${bgClass} ${col.customClass || ''} flex flex-col gap-6`}
+                    className={`${widthClass[col.width] ?? 'w-full'} ${col.padding || 'py-0'} ${col.textColor || ''} ${bgClass} ${col.customClass || ''} flex flex-col gap-6`}
                     style={bgStyle}
                   >
                     {col.content?.map((innerBlock: any, innerIndex: number) => (
