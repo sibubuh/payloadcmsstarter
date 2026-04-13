@@ -1,0 +1,377 @@
+/* PortfolioSlider.module.css */
+
+/* ── Root ─────────────────────────────────────────────────── */
+.root {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  user-select: none;
+}
+
+/* ── Stage ────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  min-height: 320px;
+  overflow: hidden;
+  background: #f5f4f0;
+}
+
+/* ── Slides ───────────────────────────────────────────────── */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slideActive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Visual (image) panel ─────────────────────────────────── */
+.visual {
+  flex: 0 0 58%;
+  position: relative;
+  overflow: hidden;
+  background: #e8e6e0;
+}
+
+.coverImg {
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slideActive .coverImg {
+  transform: scale(1);
+}
+
+.slide:not(.slideActive) .coverImg {
+  transform: scale(1.04);
+}
+
+.coverPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8e6e0;
+}
+
+.placeholderInitial {
+  font-size: 96px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.12);
+  line-height: 1;
+  letter-spacing: -4px;
+}
+
+/* Badges on image */
+.catBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
+}
+
+.featuredBadge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* Category tint variants */
+.cat_ecommerce { background: rgba(219, 234, 254, 0.95); color: #1e3a8a; }
+.cat_branding  { background: rgba(254, 226, 226, 0.95); color: #7f1d1d; }
+.cat_mobile-app { background: rgba(209, 250, 229, 0.95); color: #064e3b; }
+.cat_web-development { background: rgba(237, 233, 254, 0.95); color: #3b0764; }
+.cat_ui-ux { background: rgba(252, 231, 243, 0.95); color: #701a75; }
+.cat_motion { background: rgba(254, 243, 199, 0.95); color: #78350f; }
+
+/* ── Content panel ────────────────────────────────────────── */
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 3rem;
+  background: #fff;
+}
+
+.contentInner {
+  width: 100%;
+  transform: translateY(14px);
+  opacity: 0;
+  transition:
+    transform 0.5s 0.1s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slideActive .contentInner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.client {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 600;
+  color: #111;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.excerpt {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #666;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.techRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.techPill {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid #e5e5e5;
+  color: #555;
+  background: #fafafa;
+  letter-spacing: 0.03em;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btnPrimary {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 10px 22px;
+  border-radius: 100px;
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btnPrimary:hover { opacity: 0.8; }
+
+.btnGhost {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 100px;
+  background: transparent;
+  color: #111;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btnGhost:hover { background: #f5f5f5; border-color: #bbb; }
+
+/* ── Arrows ───────────────────────────────────────────────── */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #111;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s, transform 0.2s;
+  line-height: 1;
+}
+
+.arrow:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+.arrowPrev { left: 16px; }
+.arrowNext { right: 16px; }
+
+/* ── Counter ──────────────────────────────────────────────── */
+.counter {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.progressBar {
+  height: 100%;
+  background: #111;
+  transition: width 0.1s linear;
+}
+
+/* ── Thumbnail strip ──────────────────────────────────────── */
+.thumbStrip {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.thumbStrip::-webkit-scrollbar { display: none; }
+
+.thumb {
+  flex: 1 0 140px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  border-right: 1px solid #f0f0f0;
+  transition: background 0.2s, border-color 0.2s;
+  text-align: left;
+  min-width: 0;
+}
+
+.thumb:last-child { border-right: none; }
+.thumb:hover { background: #fafafa; }
+
+.thumbActive {
+  border-bottom-color: #111;
+  background: #fff;
+}
+
+.thumbImg {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #eee;
+}
+
+.thumbImgInner { object-fit: cover; }
+
+.thumbPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #aaa;
+}
+
+.thumbText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.thumbTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thumbSub {
+  font-size: 10px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .stage { aspect-ratio: unset; min-height: unset; }
+
+  .slide { flex-direction: column; }
+
+  .visual {
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .content {
+    padding: 24px 20px 28px;
+  }
+
+  .title { font-size: 20px; }
+
+  .thumb { flex: 0 0 120px; }
+
+  .arrowPrev, .arrowNext { display: none; }
+}
