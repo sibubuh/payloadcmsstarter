@@ -254,6 +254,7 @@
   background: rgba(0, 0, 0, 0.35);
   padding: 4px 10px;
   border-radius: 100px;
+  z-index: 5;
 }
 
 /* ── Progress bar ─────────────────────────────────────────── */
@@ -264,6 +265,7 @@
   right: 0;
   height: 2px;
   background: rgba(0, 0, 0, 0.08);
+  z-index: 5;
 }
 
 .progressBar {
@@ -355,23 +357,75 @@
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .stage { aspect-ratio: unset; min-height: unset; }
+  .stage {
+    aspect-ratio: unset;
+    min-height: unset;
+    height: auto;
+    padding-bottom: calc(56.25vw + 240px);
+    position: relative;
+    overflow: visible;
+  }
 
-  .slide { flex-direction: column; }
+  .slide {
+    flex-direction: column;
+    height: auto;
+  }
 
   .visual {
     flex: 0 0 auto;
     width: 100%;
     aspect-ratio: 16 / 9;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56.25vw;
   }
 
   .content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 56.25vw;
     padding: 24px 20px 28px;
+    background: #fff;
+    min-height: 240px;
+    align-items: flex-start;
   }
 
-  .title { font-size: 20px; }
+  .contentInner {
+    width: 100%;
+  }
 
-  .thumb { flex: 0 0 120px; }
+  .title {
+    font-size: 20px;
+  }
 
-  .arrowPrev, .arrowNext { display: none; }
+  .excerpt {
+    -webkit-line-clamp: 2;
+  }
+
+  .thumb {
+    flex: 0 0 120px;
+  }
+
+  .arrowPrev,
+  .arrowNext {
+    display: none;
+  }
+
+  .counter {
+    bottom: calc(240px + 12px);
+    z-index: 5;
+  }
+
+  .progressTrack {
+    bottom: 240px;
+    z-index: 5;
+  }
+
+  .root {
+    overflow: visible;
+    border-radius: 12px;
+  }
 }
