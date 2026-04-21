@@ -71,7 +71,6 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
-    jobs: Job;
     portfolio: Portfolio;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -86,7 +85,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
-    jobs: JobsSelect<false> | JobsSelect<true>;
     portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -819,96 +817,6 @@ export interface Form {
   createdAt: string;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jobs".
- */
-export interface Job {
-  id: number;
-  title: string;
-  /**
-   * URL-friendly identifier, e.g. "senior-engineer"
-   */
-  slug: string;
-  department:
-    | 'engineering'
-    | 'marketing'
-    | 'sales'
-    | 'hr'
-    | 'finance'
-    | 'operations'
-    | 'design'
-    | 'product'
-    | 'customer-success'
-    | 'other';
-  jobType: 'full-time' | 'part-time' | 'contract' | 'internship' | 'freelance';
-  /**
-   * e.g. "Jakarta, Indonesia"
-   */
-  location?: string | null;
-  remoteType?: ('onsite' | 'remote' | 'hybrid') | null;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  requirements?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  benefits?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  salaryRange?: {
-    min?: number | null;
-    max?: number | null;
-    currency?: ('IDR' | 'USD' | 'EUR' | 'SGD') | null;
-  };
-  status?: ('draft' | 'published' | 'closed') | null;
-  /**
-   * Show on homepage
-   */
-  featured?: boolean | null;
-  /**
-   * Select form for job application
-   */
-  applyForm?: (number | null) | Form;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * Manage your portfolio projects and case studies.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1037,24 +945,6 @@ export interface PayloadMcpApiKey {
    * The purpose of the API key.
    */
   description?: string | null;
-  jobs?: {
-    /**
-     * Allow clients to find jobs.
-     */
-    find?: boolean | null;
-    /**
-     * Allow clients to create jobs.
-     */
-    create?: boolean | null;
-    /**
-     * Allow clients to update jobs.
-     */
-    update?: boolean | null;
-    /**
-     * Allow clients to delete jobs.
-     */
-    delete?: boolean | null;
-  };
   users?: {
     /**
      * Allow clients to find users.
@@ -1133,10 +1023,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
-      } | null)
-    | ({
-        relationTo: 'jobs';
-        value: number | Job;
       } | null)
     | ({
         relationTo: 'portfolio';
@@ -1584,33 +1470,6 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jobs_select".
- */
-export interface JobsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  department?: T;
-  jobType?: T;
-  location?: T;
-  remoteType?: T;
-  description?: T;
-  requirements?: T;
-  benefits?: T;
-  salaryRange?:
-    | T
-    | {
-        min?: T;
-        max?: T;
-        currency?: T;
-      };
-  status?: T;
-  featured?: T;
-  applyForm?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "portfolio_select".
  */
 export interface PortfolioSelect<T extends boolean = true> {
@@ -1804,14 +1663,6 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
   user?: T;
   label?: T;
   description?: T;
-  jobs?:
-    | T
-    | {
-        find?: T;
-        create?: T;
-        update?: T;
-        delete?: T;
-      };
   users?:
     | T
     | {

@@ -9,7 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Jobs } from './collections/Jobs'
+
 import { Header } from './globals/Header'
 import { SiteSettings } from './globals/SiteSettings'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
@@ -26,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Jobs, Portfolio],
+  collections: [Users, Media, Pages, Portfolio],
   globals: [Header, SiteSettings, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -65,7 +65,6 @@ export default buildConfig({
     }),
     mcpPlugin({
       collections: {
-        jobs: { enabled: true },
         users: { enabled: true },
         forms: { enabled: true },
       },
