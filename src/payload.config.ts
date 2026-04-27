@@ -15,6 +15,7 @@ import { SiteSettings } from './globals/SiteSettings'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { Footer } from './globals/Footer'
 import { Portfolio } from './collections/Portfolio'
+import { Posts } from './collections/Posts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,7 +27,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Portfolio],
+  collections: [Users, Media, Pages, Portfolio, Posts],
   globals: [Header, SiteSettings, Footer],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     pages: Page;
     portfolio: Portfolio;
+    posts: Post;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-mcp-api-keys': PayloadMcpApiKey;
@@ -86,6 +87,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
@@ -910,6 +912,58 @@ export interface Portfolio {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from title on save — editable manually
+   */
+  slug: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Short summary shown in post listings
+   */
+  excerpt?: string | null;
+  coverImage?: (number | null) | Media;
+  author?: (number | null) | User;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  seo?: {
+    /**
+     * Defaults to post title if empty
+     */
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1027,6 +1081,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'portfolio';
         value: number | Portfolio;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1514,6 +1572,36 @@ export interface PortfolioSelect<T extends boolean = true> {
         author?: T;
         authorTitle?: T;
         avatar?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?: T;
+  excerpt?: T;
+  coverImage?: T;
+  author?: T;
+  status?: T;
+  publishedAt?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
       };
   seo?:
     | T

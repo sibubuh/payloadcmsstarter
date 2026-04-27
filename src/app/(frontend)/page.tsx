@@ -8,6 +8,7 @@ import config from '@/payload.config'
 import './styles.css'
 import Hero from '@/components/Hero'
 import { PortfolioSlider } from '@/components/PortfolioSlider'
+import { PostsSlider } from '@/components/PostsSlider'
 import StatsCounter from '@/components/Home/StatCounter'
 import BelowHero from '@/components/Home/BelowHero'
 
@@ -25,6 +26,7 @@ export default async function HomePage() {
       <BelowHero />
       <StatsCounter />
       <PortfolioSlider />
+      <PostsSlider />
     </>
   )
 }
