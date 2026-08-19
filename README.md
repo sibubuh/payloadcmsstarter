@@ -7,9 +7,11 @@ This project uses **PostgreSQL** as its database (via `@payloadcms/db-postgres`)
 ## Prerequisites
 
 - **Node.js** `>=20.9.0` (or `^18.20.2`)
-- **pnpm** `^9` or `^10` — install with `corepack enable` + `corepack prepare pnpm@latest --activate`, or see <https://pnpm.io/installation>
+- **pnpm** `^9` or `^10` — enable with `corepack enable` + `corepack prepare pnpm@latest --activate`, or see <https://pnpm.io/installation>
 - **PostgreSQL** — either a local install or Docker (see below)
 - **Docker** (optional) — only needed if you want to run Postgres via `docker compose`
+
+> Requires the versions declared in `package.json` → `engines` (`node` `^18.20.2 || >=20.9.0`, `pnpm` `^9 || ^10`).
 
 ## Quick start (local development)
 
@@ -25,15 +27,9 @@ This project uses **PostgreSQL** as its database (via `@payloadcms/db-postgres`)
    cp .env.example .env
    ```
 
-   Then edit `.env` and set the variables from `.env.example`:
+   > `.env` is gitignored — it will never be committed. Never put real secrets into `.env.example`.
 
-   | Variable                  | Description                                                                 |
-   | ------------------------- | --------------------------------------------------------------------------- |
-   | `DATABASE_URI`            | Postgres connection string. Default points at the local/Docker Postgres.    |
-   | `PAYLOAD_SECRET`          | A random secret string used to sign JWTs. **Required** (any value).         |
-   | `NEXT_PUBLIC_SERVER_URL`  | Public URL of the app. Defaults to `http://localhost:3000`.                 |
-
-   A minimal `.env` for local use:
+   Then set the variables in `.env` (see [Environment variables](#environment-variables)):
 
    ```bash
    DATABASE_URI=postgres://postgres:onlypgsql@127.0.0.1:5432/payload-starter
@@ -43,7 +39,7 @@ This project uses **PostgreSQL** as its database (via `@payloadcms/db-postgres`)
 
 3. **Start a PostgreSQL database**
 
-   Either run Postgres locally so that `DATABASE_URI` matches, or use the provided Docker setup (recommended — see next section).
+   Either run Postgres locally so that `DATABASE_URI` matches, or use the provided Docker setup (recommended — see [Local development with Docker](#local-development-with-docker-postgres)).
 
 4. **Run the dev server**
 
@@ -51,23 +47,58 @@ This project uses **PostgreSQL** as its database (via `@payloadcms/db-postgres`)
    pnpm dev
    ```
 
-5. Open <http://localhost:3000> in your browser and follow the on-screen instructions to create your first admin user.
+   If you need a clean restart (drops the `.next` cache), use:
 
-That's it! Changes made in `./src` are reflected live. When you're ready to ship, see [Production](#production--deployment).
+   ```bash
+   pnpm devsafe
+   ```
+
+5. Open <http://localhost:3000> in your browser and follow the on-screen instructions to create your first admin user. The admin panel lives at <http://localhost:3000/admin>.
+
+That's it! Changes made in `./src` are reflected live. When you're ready to ship, see [Production / Deployment](#production--deployment).
 
 ### Useful scripts
 
-| Script                    | Purpose                                                  |
-| ------------------------- | -------------------------------------------------------- |
-| `pnpm dev`                | Start the Next.js dev server (hot reload).               |
-| `pnpm build`              | Production build (`next build`).                         |
-| `pnpm start`              | Serve the production build (`next start`).               |
-| `pnpm generate:types`     | Regenerate `src/payload-types.ts` after schema changes.  |
-| `pnpm generate:importmap` | Regenerate the Payload admin import map.                 |
-| `pnpm lint`               | Run ESLint.                                              |
-| `pnpm test`               | Run integration + end-to-end tests.                     |
+| Script                    | Purpose                                                                  |
+| ------------------------- | ------------------------------------------------------------------------ |
+| `pnpm dev`                | Start the Next.js dev server (hot reload).                               |
+| `pnpm devsafe`            | Clear `.next` and start a clean dev server.                              |
+| `pnpm build`              | Production build (`next build`).                                         |
+| `pnpm start`              | Serve the production build (`next start`).                               |
+| `pnpm generate:types`     | Regenerate `src/payload-types.ts` after schema changes.                  |
+| `pnpm generate:importmap` | Regenerate the Payload admin import map.                                 |
+| `pnpm lint`               | Run ESLint.                                                              |
+| `pnpm test`               | Run integration + end-to-end tests.                                       |
 
 > Tip: after changing any collection/global schema, run `pnpm generate:types` and `pnpm generate:importmap` so types and the admin panel stay in sync.
+
+### Database migrations
+
+Migrations in `src/migrations/` are applied automatically when the server boots, so a fresh checkout will create its tables on first run — no manual `migrate` step is required. Generate new migrations when you change the schema and want them version-controlled.
+
+## Environment variables
+
+Copy `.env.example` → `.env` and fill in the following:
+
+| Variable                  | Description                                                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------- |
+| `DATABASE_URI`            | Postgres connection string. Default points at the local/Docker Postgres (see below).         |
+| `PAYLOAD_SECRET`          | A random secret string used to sign JWTs. **Required** — use any long random value.          |
+| `NEXT_PUBLIC_SERVER_URL`  | Public URL of the app. Defaults to `http://localhost:3000` (set your domain in production).  |
+
+A minimal `.env` for local use:
+
+```bash
+DATABASE_URI=postgres://postgres:onlypgsql@127.0.0.1:5432/payload-starter
+PAYLOAD_SECRET=replace-with-a-random-string
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+```
+
+Generate a strong secret with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 ## Local development with Docker (Postgres)
 
@@ -98,6 +129,18 @@ Steps:
 
 > Note: `docker-compose.yml` references `./pgsql-multidb.sh` as an init entrypoint. The primary `payload-starter` database is created automatically via the `POSTGRES_DB` environment variable, so the app works without any extra setup. The init script only provisions optional additional databases/roles.
 
+## Running locally as a production build
+
+To verify a real production deployment on your machine (no hot reload, tree-shaken build), run:
+
+```bash
+pnpm install
+pnpm build
+pnpm start
+```
+
+`pnpm start` requires `DATABASE_URI` and `PAYLOAD_SECRET` to be set in the environment (they are read from `.env` automatically). The app listens on port `3000`.
+
 ## Production / Deployment
 
 ### Build & serve (Node host)
@@ -110,14 +153,12 @@ pnpm build
 pnpm start
 ```
 
-`pnpm start` requires `DATABASE_URI` and `PAYLOAD_SECRET` to be set in the environment.
-
 ### Docker image
 
 The included `Dockerfile` builds a standalone Next.js production image based on `node:22-alpine`.
 
 > ⚠️ The `Dockerfile` relies on Next.js's [standalone output](https://nextjs.org/docs/app/api-reference/config/next-config-js/output). Before building the image, add `output: 'standalone'` to `next.config.mjs`, e.g.:
-
+>
 > ```js
 > const nextConfig = {
 >   output: 'standalone',
@@ -137,6 +178,14 @@ docker run -p 3000:3000 \
 ```
 
 The container listens on port `3000`.
+
+## Troubleshooting
+
+- **`Error: connect ECONNREFUSED 127.0.0.1:5432`** — Postgres isn't running or `DATABASE_URI` is wrong. Start the DB (`docker compose up`) and confirm the host/port/credentials match `.env`.
+- **`PAYLOAD_SECRET` missing / invalid JWTs** — set a non-empty `PAYLOAD_SECRET` in `.env`. Changing it after users exist will invalidate existing sessions.
+- **Port 3000 already in use** — either stop the process using it or change the port via `PORT=4000 pnpm dev` / `pnpm start`.
+- **Admin panel looks unstyled / component errors** — regenerate the admin artifacts after schema or component changes: `pnpm generate:types && pnpm generate:importmap`, then `pnpm devsafe`.
+- **Blank DB / missing collections on first run** — tables are created by auto-migrations on boot; confirm the app can reach Postgres and restart `pnpm dev`.
 
 ## How it works
 
